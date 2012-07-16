@@ -1,0 +1,14 @@
+package com.fracarlu.runjumprun.Objects;
+
+public class Plataforma extends GameObject
+{
+	public static final float PLATAFORMA_WIDTH = 1;
+	public static final float PLATAFORMA_HEIGHT = 1;		
+		
+	int state;
+	float stateTime;
+
+	public Plataforma(float x, float y) {
+		super(x, y, PLATAFORMA_WIDTH, PLATAFORMA_HEIGHT);				
+	}		
+}

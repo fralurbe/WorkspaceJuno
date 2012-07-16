@@ -1,0 +1,12 @@
+package com.fracarlu.runjumprun.Engine;
+
+public final class Config {
+	public static int anchoBoton = 128;
+	public static int altoBoton = 64;
+	public static int anchoTotal = 320;
+	public static int altoTotal = 480;
+	public static int centroanchoTotal  = anchoTotal / 2;
+	public static int centroaltoTotal = altoTotal / 2;
+	public static boolean sonidoActivado = false;
+
+}

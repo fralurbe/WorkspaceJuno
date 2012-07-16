@@ -1,0 +1,54 @@
+package com.fracarlu.runjumprun;
+
+import com.fracarlu.runjumprun.Mundo;
+
+public class Obstaculo extends DynamicGameObject
+{
+	public static final float OBSTACULO_WIDTH = 1;
+	public static final float OBSTACULO_HEIGHT = 1;
+	public static final int OBSTACULO_TYPE_STATIC = 0;
+	public static final int OBSTACULO_TYPE_MOVING = 1;
+	public static final int OBSTACULO_STATE_NORMAL = 0;
+	public static final int OBSTACULO_STATE_PULVERIZING = 1;
+	public static final float OBSTACULO_PULVERIZE_TIME = 0.2f * 4;
+	public static final float OBSTACULO_VELOCITY = 2;
+
+	int type;
+	int state;
+	float stateTime;
+
+	public Obstaculo(int type, float x, float y) {
+		super(x, y, OBSTACULO_WIDTH, OBSTACULO_HEIGHT);
+		this.type = type;
+		this.state = OBSTACULO_STATE_NORMAL;
+		this.stateTime = 0;
+		if (type == OBSTACULO_TYPE_MOVING) {
+			velocity.y = OBSTACULO_VELOCITY;
+		}
+	}
+
+	public void update (float deltaTime) {
+		if (type == OBSTACULO_TYPE_MOVING) {
+			position.add(velocity.y * deltaTime, 0);
+			bounds.x = position.x - OBSTACULO_WIDTH / 2;
+			bounds.y = position.y - OBSTACULO_HEIGHT / 2;
+
+			if (position.y < OBSTACULO_WIDTH / 2) {
+				velocity.x = -velocity.x;
+				position.x = OBSTACULO_WIDTH / 2;
+			}
+			if (position.x > Mundo.MUNDO_WIDTH - OBSTACULO_WIDTH / 2) {
+				velocity.x = -velocity.x;
+				position.x = Mundo.MUNDO_WIDTH - OBSTACULO_WIDTH / 2;
+			}
+		}
+
+		stateTime += deltaTime;
+	}
+
+	public void pulverize () {
+		state = OBSTACULO_STATE_PULVERIZING;
+		stateTime = 0;
+		velocity.x = 0;
+	}
+}

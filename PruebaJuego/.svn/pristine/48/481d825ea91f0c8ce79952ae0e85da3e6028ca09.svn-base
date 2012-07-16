@@ -1,0 +1,69 @@
+package com.fracarlu.runjumprun.Objects;
+
+import com.fracarlu.runjumprun.Mundo;
+
+public class Corredor extends DynamicGameObject
+{
+	public static final int CORREDOR_STATE_JUMP = 0;
+	public static final int CORREDOR_STATE_CAER = 1;
+	public static final int CORREDOR_STATE_HIT = 2;
+	public static final float CORREDOR_JUMP_VELOCITY = 11;
+	public static final float CORREDOR_MOVE_VELOCITY = 20;
+	public static final float CORREDOR_WIDTH = 0.8f;
+	public static final float CORREDOR_HEIGHT = 0.8f;
+	
+	public int estado;
+	public float estadoTime;
+
+	public Corredor(float x, float y) 
+	{
+		super(x, y, CORREDOR_WIDTH , CORREDOR_HEIGHT);
+		estado = CORREDOR_STATE_CAER;
+		estadoTime = 0;
+	}
+	
+	public void update (float deltaTime) {
+		if (position.y <= 0)
+		{
+			velocity.add(Mundo.gravedad.x * deltaTime, 0f);
+			position.add(velocity.x * deltaTime, 0f);
+		}
+		else
+		{
+			velocity.add(Mundo.gravedad.x * deltaTime, Mundo.gravedad.y * deltaTime);
+			position.add(velocity.x * deltaTime, velocity.y * deltaTime);	
+		}
+		bounds.x = position.x - bounds.width / 2;
+		bounds.y = position.y - bounds.height / 2;
+				
+		/*
+		if (velocity.y > 0 && estado != CORREDOR_STATE_HIT) {
+			if (estado != CORREDOR_STATE_JUMP) {
+				estado = CORREDOR_STATE_JUMP;
+				estadoTime = 0;
+			}
+		}
+
+		if (velocity.y < 0 && estado != CORREDOR_STATE_HIT) {
+			if (estado != CORREDOR_STATE_CAER) {
+				estado = CORREDOR_STATE_CAER;
+				estadoTime = 0;
+			}
+		}
+  		*/		
+		
+		if (position.x < 0) 
+			position.x = Mundo.MUNDO_WIDTH;
+		if (position.x > Mundo.MUNDO_WIDTH) 
+			position.x = 0;
+		
+		estadoTime += deltaTime;
+	}
+	
+	public void hitObstaculo () {
+		//velocity.y = CORREDOR_JUMP_VELOCITY * 1.5f;
+		velocity.y = 1f;
+		//estado = CORREDOR_STATE_JUMP;
+		estadoTime = 0;
+	}
+}

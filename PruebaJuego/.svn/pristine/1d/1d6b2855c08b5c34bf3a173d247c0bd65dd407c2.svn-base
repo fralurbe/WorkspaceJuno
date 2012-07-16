@@ -1,0 +1,19 @@
+package com.fracarlu.runjumprun.Objects;
+
+public class Tile extends GameObject {
+	public static final float TILE_WIDTH = 1f;
+	public static final float TILE_HEIGHT = 1f;
+	public static final int TILE_TYPE = 0;
+
+	public  int type = TILE_TYPE;
+
+	public Tile(float x, float y, float width, float height) {
+		super(x, y, width, height);
+ 	}
+	
+	public Tile(int type, float x, float y) {
+		super(x, y, TILE_WIDTH, TILE_HEIGHT);
+		this.type = type;		
+	}
+
+}

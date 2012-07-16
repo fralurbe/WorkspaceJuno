@@ -1,0 +1,68 @@
+package com.fracarlu.runjumprun.Objects;
+
+import com.fracarlu.runjumprun.Mundo;
+
+public class Plataforma extends DynamicGameObject
+{
+	public static final float PLATAFORMA_WIDTH = 1;
+	public static final float PLATAFORMA_HEIGHT = 1;
+	public static final int PLATAFORMA_TYPE_STATIC = 0;
+	public static final int PLATAFORMA_TYPE_MOVING = 1;
+	public static final int PLATAFORMA_STATE_NORMAL = 0;
+	public static final int PLATAFORMA_STATE_PULVERIZING = 1;
+	public static final int PLATAFORMA_STATE_HIT = 1;	
+	public static final float PLATAFORMA_VELOCITY = 2;
+
+	int type;
+	int state;
+	float stateTime;
+
+	public Plataforma(int type, float x, float y) {
+		super(x, y, PLATAFORMA_WIDTH, PLATAFORMA_HEIGHT);
+		this.type = type;
+		this.state = PLATAFORMA_STATE_NORMAL;
+		this.stateTime = 0;
+		/*
+		if (type == PLATAFORMA_TYPE_MOVING) {
+			velocity.y = PLATAFORMA_VELOCITY;
+		}
+		*/
+	}
+
+	public Plataforma(int type, float x, float y,float width,float height) {
+		super(x, y, width, height);
+		this.type = type;
+		this.state = PLATAFORMA_STATE_NORMAL;
+		this.stateTime = 0;
+		/*
+		if (type == PLATAFORMA_TYPE_MOVING) {
+			velocity.y = PLATAFORMA_VELOCITY;
+		}
+		*/
+	}
+
+	public void update (float deltaTime) {
+		if (type == PLATAFORMA_TYPE_MOVING) {
+			position.add(velocity.y * deltaTime, 0);
+			bounds.x = position.x - PLATAFORMA_WIDTH / 2;
+			bounds.y = position.y - PLATAFORMA_HEIGHT / 2;
+
+			if (position.y < PLATAFORMA_WIDTH / 2) {
+				velocity.x = -velocity.x;
+				position.x = PLATAFORMA_WIDTH / 2;
+			}
+			if (position.x > Mundo.MUNDO_WIDTH - PLATAFORMA_WIDTH / 2) {
+				velocity.x = -velocity.x;
+				position.x = Mundo.MUNDO_WIDTH - PLATAFORMA_WIDTH / 2;
+			}
+		}
+		stateTime += deltaTime;
+	}
+
+	
+	public void Hit () {
+		state = PLATAFORMA_STATE_HIT;
+		stateTime = 0;
+		velocity.x = 0;
+	}
+}

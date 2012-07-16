@@ -1,0 +1,167 @@
+package com.fracarlu.runjumprun.Engine;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import com.badlogic.gdx.math.Vector2;
+import com.fracarlu.runjumprun.Objects.*;
+import com.fracarlu.runjumprun.Tools.*;
+
+
+public class Mundo {	
+	public interface MundoListener 
+	{
+		public void saltar ();
+		public void doblesalto ();
+		public void chocar ();
+	}
+	public static final int TILE_WIDTH = 1 ;
+	public static final int TILES_HEIGHT = 1 ;
+	public static final int TILES_PER_SCREEN = 10 ;
+	public static final int SCREENS_PER_LEVEL = 5;
+	public static final int MUNDO_WIDTH = TILES_PER_SCREEN * SCREENS_PER_LEVEL;
+	public static final int MUNDO_HEIGHT = 15;
+	public static final int MUNDO_STATE_RUNNING = 0;
+	public static final int MUNDO_STATE_NEXT_LEVEL = 1;
+	public static final int MUNDO_STATE_GAME_OVER = 2;
+	public static final Vector2 gravedad = new Vector2(0, -12);
+	
+	public Corredor corredor;
+	public List<Obstaculo> obstaculos;
+	public final List<Plataforma> plataformas;
+	public final Random rand;
+	public final MundoListener listener;
+	
+
+	public float distanciaConseguida;
+	public int puntuacion;
+	public int estado;
+	
+	public Mundo (MundoListener listener) {
+		this.corredor = new Corredor(5, 6);
+		this.obstaculos = new ArrayList<Obstaculo>();
+		this.plataformas = new ArrayList<Plataforma>();
+				
+		this.listener = listener;
+		rand = new Random();
+		//GenerarNivel();
+		GenerarNivel2();
+
+		this.distanciaConseguida = 0;
+		this.puntuacion = 0;
+		this.estado = MUNDO_STATE_RUNNING;
+	}
+	
+	private void GenerarNivel()
+	{
+		float y = Obstaculo.OBSTACULO_HEIGHT / 2;
+		float maxJumpHeight = Corredor.CORREDOR_JUMP_VELOCITY * Corredor.CORREDOR_JUMP_VELOCITY /
+				(2 * - gravedad.y);
+		while (y < MUNDO_HEIGHT - MUNDO_WIDTH / 2) {
+			int type = rand.nextFloat() > 0.8f ? Obstaculo.OBSTACULO_TYPE_MOVING : Obstaculo.OBSTACULO_TYPE_STATIC;
+			float x = rand.nextFloat() * (MUNDO_WIDTH - Obstaculo.OBSTACULO_WIDTH) + Obstaculo.OBSTACULO_WIDTH / 2;
+
+			Obstaculo obstaculo = new Obstaculo(type, x, y);
+			obstaculos.add(obstaculo);
+			y += (maxJumpHeight - 0.5f);
+			y -= rand.nextFloat() * (maxJumpHeight / 3);
+		}
+	}
+	
+	private void GenerarNivel2()
+	{	
+		for (int i = 0;i< MUNDO_WIDTH ;i++)			
+		{
+			Plataforma plataforma = 
+					new Plataforma(
+							Plataforma.PLATAFORMA_TYPE_STATIC,
+							i*TILE_WIDTH,
+							0,
+							TILE_WIDTH,
+							TILES_HEIGHT);
+			plataformas.add(plataforma);
+		}
+	}
+	
+	public void update (float deltaTime, float accelX)
+	{
+		updateCorredor (deltaTime, accelX); 
+		//updateObstaculos (deltaTime);
+		updatePlataformas (deltaTime);
+		//if (corredor.estado != Corredor.CORREDOR_STATE_HIT) checkObstaculoCollisions();
+	}
+	
+	private void updateCorredor (float deltaTime, float accelX) 
+	{
+		/*
+		if (corredor.estado != Corredor.CORREDOR_STATE_HIT && corredor.position.y <= 0.5f) 			
+			corredor.hitObstaculo();
+		if (corredor.estado != Corredor.CORREDOR_STATE_HIT) 
+			corredor.velocity.x = -accelX / 10 * Corredor.CORREDOR_MOVE_VELOCITY;
+		*/
+		for (int i = 0; i < plataformas.size(); i++)
+		{
+			if ( Utils.RectanguloPisandoOtro( corredor.bounds, plataformas.get(i).bounds ))
+			{
+				corredor.velocity.y = 0;	
+			}			
+		}
+		
+		corredor.update(deltaTime);
+		if (corredor.position.x > MUNDO_WIDTH)
+			estado = MUNDO_STATE_NEXT_LEVEL;
+		distanciaConseguida = Math.max(corredor.position.x, distanciaConseguida);
+	}
+
+	private void updateObstaculos (float deltaTime) 
+	{
+		int len = obstaculos.size();
+		for (int i = 0; i < len; i++) 
+		{
+			Obstaculo obstaculo = obstaculos.get(i);
+			obstaculo.update(deltaTime);
+			if (obstaculo.state == Obstaculo.OBSTACULO_STATE_PULVERIZING &&
+				obstaculo.stateTime > Obstaculo.OBSTACULO_PULVERIZE_TIME) 
+			{
+				obstaculos.remove(obstaculo);
+				len = obstaculos.size();
+			}
+		}
+	}
+	
+	private void updatePlataformas (float deltaTime) 
+	{
+		int len = plataformas.size();
+		for (int i = 0; i < len; i++) 
+		{
+			Plataforma plataforma = plataformas.get(i);
+			plataforma.update(deltaTime);			
+		}
+	}
+	
+	private void checkGameOver () {
+		if (distanciaConseguida - 7.5f > corredor.position.x) {
+			estado = MUNDO_STATE_GAME_OVER;
+		}
+	}
+		
+	private void checkObstaculoCollisions () {	
+		int len = obstaculos.size();
+		for (int i = 0; i < len; i++) {
+			Obstaculo obstaculo = obstaculos.get(i);
+			//if (corredor.position.y > obstaculo.position.y) {
+				if (Utils.SuperposicionRectangulos(corredor.bounds, obstaculo.bounds)) 
+				{
+					obstaculo.Hit();
+					corredor.hitObstaculo();
+					//corredor.hitObstaculo();
+					//listener.saltar();
+					if (rand.nextFloat() > 0.5f) {
+						obstaculo.pulverize();
+					}
+					break;
+				}			
+		}
+	}
+}

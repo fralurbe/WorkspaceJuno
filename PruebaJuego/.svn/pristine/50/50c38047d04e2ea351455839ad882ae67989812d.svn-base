@@ -1,0 +1,128 @@
+package com.fracarlu.runjumprun;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+public class MundoPintador {
+	static final float FRUSTUM_WIDTH = 10;
+	static final float FRUSTUM_HEIGHT = 15;
+	Mundo mundo;
+	OrthographicCamera cam;
+	SpriteBatch batcher;
+	TextureRegion fondo;
+	
+	public MundoPintador (SpriteBatch batch, Mundo mundo) {
+		this.mundo = mundo;
+		this.cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+		this.cam.position.set(FRUSTUM_WIDTH / 2, FRUSTUM_HEIGHT / 2, 0);
+		this.batcher = batch;
+		this.fondo = Assets.fondogeneral; 
+	}
+
+	public void render () {
+		try
+		{
+			if (mundo.corredor.position.x > cam.position.x) 
+			{
+				cam.position.x = mundo.corredor.position.x;
+			}
+			cam.update();
+			batcher.setProjectionMatrix(cam.combined);
+			renderFondo();
+			renderObjectos();
+		}
+		catch (Exception ex)
+		{
+			Gdx.app.log("error", ex.toString());
+		}
+	}
+	
+	public void renderFondo() {
+		try
+		{
+			batcher.disableBlending();
+			batcher.begin();
+			batcher.draw(fondo, 0, 0);
+			batcher.end();
+		}
+		catch (Exception ex)
+		{
+			Gdx.app.log("error", ex.toString());
+		}
+	}
+	
+	public void renderObjectos() {
+		try
+		{
+			batcher.disableBlending();
+			batcher.begin();
+			renderCorredor();
+			renderObstaculos();	
+			batcher.end();
+		}
+		catch (Exception ex)
+		{
+			Gdx.app.log("error", ex.toString());
+		}
+	}
+	
+	public void renderObstaculos() {
+		try
+		{
+			int len = mundo.obstaculos.size();
+			for (int i = 0; i < len; i++) {
+				Obstaculo obstaculo = mundo.obstaculos.get(i);
+				TextureRegion keyFrame = Assets.quad_1;			
+				batcher.draw(
+						keyFrame,
+						obstaculo.position.x - 1,
+						obstaculo.position.y - 0.25f,
+						1,
+						1);
+			}
+		}
+		catch (Exception ex)
+		{
+			Gdx.app.log("error", ex.toString());
+		}		
+	}
+	
+	public void renderCorredor() {
+		try
+		{
+			TextureRegion keyFrame;
+			switch (mundo.corredor.estado) {
+				case Corredor.CORREDOR_STATE_CAER:
+					keyFrame = Assets.corredorCorrer.getKeyFrame(
+							mundo.corredor.estadoTime, 
+							Animacion.ANIMACION_LOOPING);
+					break;
+				case Corredor.CORREDOR_STATE_JUMP:
+					keyFrame = Assets.corredorSaltar.getKeyFrame(
+							mundo.corredor.estadoTime,
+							Animacion.ANIMACION_LOOPING);
+					break;
+				case Corredor.CORREDOR_STATE_HIT:
+				default:
+					keyFrame = Assets.corredorChocar;
+			}
+			float side = mundo.corredor.velocity.x < 0 ? -1 : 1;
+			if (side < 0)
+				batcher.draw(keyFrame, mundo.corredor.position.x + 0.5f, mundo.corredor.position.y - 0.5f, side * 1, 1);
+			else
+				batcher.draw(keyFrame, mundo.corredor.position.x - 0.5f, mundo.corredor.position.y - 0.5f, side * 1, 1);
+		}
+		catch (Exception ex)
+		{
+			Gdx.app.log("error", ex.toString());
+		}	
+	
+	}
+	
+}
+
+/*
+
+*/

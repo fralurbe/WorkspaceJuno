@@ -1,0 +1,32 @@
+package com.fracarlu.runjumprun.Screens;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
+import com.fracarlu.runjumprun.Config;
+
+public abstract class Pantalla 
+{
+	protected  Juego juego;
+	protected  OrthographicCamera guiCam;
+	protected  SpriteBatch batcher;
+	protected  Vector3 touchPoint;
+		
+	public Pantalla (Juego juego){
+		this.juego = juego;
+		guiCam = new OrthographicCamera(Config.anchoTotal, Config.altoTotal);              
+        guiCam.position.set(Config.centroanchoTotal, Config.centroaltoTotal, 0);
+        batcher = new SpriteBatch();
+        touchPoint = new Vector3();
+	}
+
+	public abstract void update (float deltaTime);
+
+	public abstract void render (float deltaTime);
+
+	public abstract void pause ();
+
+	public abstract void resume ();
+
+	public abstract void dispose ();
+}
