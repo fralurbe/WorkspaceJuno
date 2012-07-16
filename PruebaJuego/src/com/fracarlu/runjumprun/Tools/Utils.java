@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 
 public class Utils
 {
+	public static float crontime = 0f;
 	public static final float margenaltura = 0.1f;
 	public static final String  ficheroniveles = "niveles.txt";
 	// @Comprueba si r1 está dentro de r2
@@ -57,8 +58,6 @@ public class Utils
 	{
 		
 		String fileContent;
-		//String path = "com/fracarlu/runjumprun/assets/niveles.txt";
-        //FileHandle  handle = Gdx.files.classpath(path);   
 		String path = "levels.txt";
 		try
 		{
@@ -68,5 +67,17 @@ public class Utils
 		catch (Exception ex)
 		{return "";}
         return fileContent;	   
-	}		
+	}
+	
+	public static boolean Chronometer (float endtime, float deltatime)
+	{
+		crontime += deltatime;
+		if( crontime >= endtime)
+		{
+			crontime = 0f;
+			return true;
+		}		
+		return false;		
+	}
+
 }

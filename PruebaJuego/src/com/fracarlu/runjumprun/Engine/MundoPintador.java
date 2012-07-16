@@ -86,8 +86,8 @@ public class MundoPintador {
 						keyFrame,
 						plataforma.position.x,
 						plataforma.position.y,
-						Plataforma.PLATAFORMA_WIDTH,
-						Plataforma.PLATAFORMA_HEIGHT);				
+						plataforma.TILE_WIDTH,
+						plataforma.TILE_HEIGHT);				
 			}
 		}
 		catch (Exception ex)
@@ -97,9 +97,8 @@ public class MundoPintador {
 	}
 	
 	public void renderObstaculos()
-	{		
-		int len = LevelParser.obstaculos.length;
-		for (int i = 0; i < len; i++)
+	{				
+		for (int i = 0; i < LevelParser.obstaculos.length; i++)
 		{
 			batcher.draw(
 					LevelParser.obstaculos[i].getAsset(),
@@ -118,6 +117,11 @@ public class MundoPintador {
 			switch (mundo.corredor.estado) {				
 				case Corredor.CORREDOR_STATE_JUMP:
 					keyFrame = Assets.corredorSaltar.getKeyFrame(
+							mundo.corredor.estadoTime,
+							Animacion.ANIMACION_NONLOOPING);
+					break;
+				case Corredor.CORREDOR_STATE_HIT:
+					keyFrame = Assets.corredorHit.getKeyFrame(
 							mundo.corredor.estadoTime,
 							Animacion.ANIMACION_NONLOOPING);
 					break;				

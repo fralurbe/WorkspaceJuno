@@ -6,35 +6,39 @@ import com.badlogic.gdx.math.Vector2;
 import com.fracarlu.runjumprun.Objects.*;
 import com.fracarlu.runjumprun.Tools.*;
 
-public class Mundo {	
+public class Mundo 
+{	
 	public interface MundoListener 
 	{
 		public void saltar ();
 		public void doblesalto ();
 		public void chocar ();
 	}
+	
 	public static final int TILE_WIDTH = 1 ;
 	public static final int TILE_HEIGHT = 1 ;
 	public static final int TILES_PER_SCREEN = 10 ;
 	public static final int SCREENS_PER_LEVEL = 5;
 	public static final int MUNDO_WIDTH = TILES_PER_SCREEN * SCREENS_PER_LEVEL;
 	public static final int MUNDO_HEIGHT = 15;
-	public static final int MUNDO_END = MUNDO_WIDTH-TILES_PER_SCREEN/2;
+	public static final int MUNDO_END = MUNDO_WIDTH - TILES_PER_SCREEN/2;
 	public static final int MUNDO_STATE_RUNNING = 0;
 	public static final int MUNDO_STATE_NEXT_LEVEL = 1;
 	public static final int MUNDO_STATE_GAME_OVER = 2;
-	public static final Vector2 gravedad = new Vector2(0, -12);	
+	
+	public static final Vector2 gravedad = new Vector2(0, -10);	
 	
 	public Corredor corredor;	
 	
 	public final ArrayList<Plataforma> plataformas;
-	//public final ArrayList<ObstaculoNormal> obstaculos;
+	// public final ArrayList<ObstaculoNormal> obstaculos;
 	public final Random rand;
 	public final MundoListener listener;	
 
 	public float distanciaConseguida;
 	public int puntuacion;
 	public int estado;
+	
 	
 	public Mundo (MundoListener listener) {
 		this.corredor = new Corredor(1, 5);
@@ -60,7 +64,7 @@ public class Mundo {
 	{		
 		for (int i = 0; i < MUNDO_WIDTH ; i++)		
 		{
-			Plataforma plataforma = new Plataforma(i * TILE_WIDTH, 0);
+			Plataforma plataforma = new Plataforma(i * TILE_WIDTH, 0, 0);
 			plataformas.add(plataforma);			
 		}
 	}
@@ -74,14 +78,21 @@ public class Mundo {
 	{
 		if (corredor.estado != Corredor.CORREDOR_STATE_UPON_PLATFORM)
 		{
-			for (int i = 0; i < plataformas.size(); i++)
+			if (corredor.estado != Corredor.CORREDOR_STATE_HIT)
 			{
-				if (Utils.RectanguloPisandoOtro( corredor.bounds, plataformas.get(i).bounds))
+				int initpostocheck = (int)Math.round(corredor.position.x);
+				if (initpostocheck > 1)
 				{
-					corredor.velocity.y = 0;
-					corredor.estado = Corredor.CORREDOR_STATE_UPON_PLATFORM;
-					break;
-				}			
+					for (int i = 0; i < plataformas.size(); i++)
+					{
+						if (Utils.RectanguloPisandoOtro( corredor.bounds, plataformas.get(i).bounds))
+						{
+							corredor.velocity.y = 0;
+							corredor.estado = Corredor.CORREDOR_STATE_UPON_PLATFORM;
+							break;
+						}			
+					}
+				}
 			}
 		}
 		
@@ -93,10 +104,9 @@ public class Mundo {
 		
 		if (checkHitObstaculo() != -1)
 		{
-			corredor.estado = Corredor.CORREDOR_STATE_HIT;
-			estado = MUNDO_STATE_GAME_OVER;
+			corredor.estado = Corredor.CORREDOR_STATE_HIT;			
 			corredor.velocity.x = -5f;
-			corredor.velocity.y = 5f;
+			corredor.velocity.y = 5f;			
 		}
 		
 		corredor.update(deltaTime);
@@ -112,11 +122,14 @@ public class Mundo {
 	private int checkHitObstaculo()
 	{
 		int initpostocheck = (int)Math.round(corredor.position.x);
-		for (int i =  0; i < LevelParser. obstaculos.length; i++ )
+		if (initpostocheck > 1)
 		{
-			if (corredor.bounds.overlaps(LevelParser. obstaculos[i].bounds))
+			for (int i =  initpostocheck - 1 ; i < LevelParser. obstaculos.length; i++ )
 			{
-				return i;
+				if (corredor.bounds.overlaps(LevelParser. obstaculos[i].bounds))
+				{
+					return i;
+				}
 			}
 		}
 		return -1;
@@ -128,5 +141,6 @@ public class Mundo {
 		{
 			estado = MUNDO_STATE_GAME_OVER;
 		}
-	}		
+	}
+	
 }

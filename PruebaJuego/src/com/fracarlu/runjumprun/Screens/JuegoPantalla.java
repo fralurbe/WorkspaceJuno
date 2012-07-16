@@ -12,7 +12,6 @@ import com.fracarlu.runjumprun.Engine.Juego;
 import com.fracarlu.runjumprun.Engine.Mundo;
 import com.fracarlu.runjumprun.Engine.Mundo.MundoListener;
 import com.fracarlu.runjumprun.Engine.MundoPintador;
-import com.fracarlu.runjumprun.Objects.Corredor;
 import com.fracarlu.runjumprun.Tools.*;
 
 public class JuegoPantalla extends Pantalla
@@ -63,12 +62,14 @@ public class JuegoPantalla extends Pantalla
 		pauseBounds = new Rectangle(Config.anchoTotal - Config.anchoBoton, 0,
 				Config.anchoBoton, Config.altoBoton);
 
-		resumeBounds = new Rectangle(Config.anchoTotal / 2 - Config.anchoBoton
-				/ 2, Config.altoTotal / 2 + Config.altoBoton, Config.anchoBoton,
+		resumeBounds = new Rectangle(Config.anchoTotal / 2 - Config.anchoBoton / 2,
+				Config.altoTotal / 2 + Config.altoBoton, 
+				Config.anchoBoton,
 				Config.altoBoton);
 
 		quitBounds = new Rectangle(Config.anchoTotal / 2 - Config.anchoBoton / 2,
-				Config.altoTotal / 2 - Config.altoBoton, Config.anchoBoton,
+				Config.altoTotal / 2 - Config.altoBoton, 
+				Config.anchoBoton,
 				Config.altoBoton);
 
 		lastScore = 0;
@@ -180,8 +181,9 @@ public class JuegoPantalla extends Pantalla
 			//	accelx = 2f;			
 			if (Gdx.input.isKeyPressed(Keys.DPAD_UP))
 			{
-				accely = Corredor.CORREDOR_JUMP_IMPULSE;
-				mundo.corredor.estado = mundo.corredor.CORREDOR_STATE_JUMP;
+				//accely = Corredor.CORREDOR_JUMP_IMPULSE;
+				//mundo.corredor.estado = mundo.corredor.CORREDOR_STATE_JUMP;
+				mundo.corredor.Jump();
 			}
 			
 			mundo.update(deltaTime, accelx,accely);
@@ -222,21 +224,21 @@ public class JuegoPantalla extends Pantalla
 		batcher.begin();
 		switch (estado)
 		{
-		case GAME_READY:
-			renderReady();
-			break;
-		case GAME_RUNNING:
-			renderRunning();
-			break;
-		case GAME_PAUSED:
-			renderPaused();
-			break;
-		case GAME_LEVEL_END:
-			renderLevelEnd();
-			break;
-		case GAME_OVER:
-			renderGameOver();
-			break;
+			case GAME_READY:
+				renderReady();
+				break;
+			case GAME_RUNNING:
+				renderRunning();
+				break;
+			case GAME_PAUSED:
+				renderPaused();
+				break;
+			case GAME_LEVEL_END:
+				renderLevelEnd();
+				break;
+			case GAME_OVER:
+				renderGameOver();
+				break;
 		}
 		batcher.end();
 
@@ -283,12 +285,18 @@ public class JuegoPantalla extends Pantalla
 	private void renderGameOver()
 	{
 		batcher.draw(
-				Assets.gameover, Config.anchoTotal / 2 - Config.anchoTotal
-				/ 2, Config.altoTotal / 2 - Config.altoBoton / 2,
-				Config.anchoBoton, Config.altoBoton);
+				Assets.gameover,
+				Config.anchoTotal / 2 - Config.anchoBoton / 2, 
+				Config.altoTotal / 2 - Config.altoBoton / 2,
+				Config.anchoBoton, 
+				Config.altoBoton);
+		
 		float scoreWidth = Assets.fuente.getBounds(scoreString).width;
-		Assets.fuente.draw(batcher, scoreString, Config.anchoTotal / 2
-				- scoreWidth / 2, 480 - 20);
+		Assets.fuente.draw(
+				batcher, 
+				scoreString, 
+				Config.anchoTotal / 2 - scoreWidth / 2, 
+				Config.altoTotal - 20);
 	}
 
 	@Override

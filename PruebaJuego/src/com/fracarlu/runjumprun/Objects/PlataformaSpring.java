@@ -1,8 +1,8 @@
 package com.fracarlu.runjumprun.Objects;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.badlogic.gdx.math.Vector2;
-import com.fracarlu.runjumprun.Asset.Assets;
+
 /**
  * 
  * @author Fran
@@ -11,11 +11,11 @@ import com.fracarlu.runjumprun.Asset.Assets;
  */
 
 public class PlataformaSpring extends Plataforma {
+	public static final int SPRING_TYPE = 1;
 	
-	public static final Vector2 force = new Vector2(0, 5f);
-	public static final TextureRegion ASSET = Assets.quad_8;
+	public static final Vector2 force = new Vector2(0, 5f);	
 	
 	public PlataformaSpring (float x, float y) {
-		super(x, y, ASSET);		
+		super(x, y, SPRING_TYPE);		
 	}		
 }

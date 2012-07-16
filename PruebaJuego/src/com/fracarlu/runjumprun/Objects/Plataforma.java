@@ -3,23 +3,17 @@ package com.fracarlu.runjumprun.Objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fracarlu.runjumprun.Asset.Assets;
 
-public class Plataforma extends GameObject
+public class Plataforma extends Tile
 {
-	public static final float PLATAFORMA_WIDTH = 1;
-	public static final float PLATAFORMA_HEIGHT = 1;
 	public static final TextureRegion ASSET = Assets.platform;
-	public static TextureRegion asset;
-	
-	int state;
-	float stateTime;
+	public static TextureRegion asset;	
 
-	public Plataforma(float x, float y) {
-		super(x, y, PLATAFORMA_WIDTH, PLATAFORMA_HEIGHT);
-		Plataforma.asset = ASSET;
+	public Plataforma(float x, float y, float width, float height) {		
+		super(x, y, width, height);
 	}
 	
-	public Plataforma(float x, float y, TextureRegion asset) {
-		super(x, y, PLATAFORMA_WIDTH, PLATAFORMA_HEIGHT);
-		Plataforma.asset = asset;
-	}		
+	public Plataforma(float x, float y, int type) {
+		super(x, y, TILE_WIDTH, TILE_HEIGHT);
+		this.type = type;		
+	}	
 }

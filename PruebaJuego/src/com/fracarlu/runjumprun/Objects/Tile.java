@@ -3,31 +3,24 @@ package com.fracarlu.runjumprun.Objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fracarlu.runjumprun.Asset.Assets;
 
-public class Tile extends GameObject {
+public class Tile extends GameObject 
+{
 	public static final float TILE_WIDTH = 1f;
 	public static final float TILE_HEIGHT = 1f;
 	public static final int TILE_TYPE = 0;	
-	
-	//public static TextureRegion asset;
+		
 	public  int type = TILE_TYPE;		
 
 	public Tile(float x, float y, float width, float height) {
-		super(x, y, width, height);
-		//Tile.asset = ASSET;		
+		super(x, y, width, height);		
  	}
 	
 	public Tile(float x, float y, int type) {
 		super(x, y, TILE_WIDTH, TILE_HEIGHT);
-		this.type = type;
-		//Tile.asset = ASSET;
-	}
+		this.type = type;		
+	}	
 	
 	public TextureRegion getAsset()
-	{
-		return Assets.quad_1;
-	}
-	
-	public TextureRegion getAsset(int type)
 	{
 		switch (type)
 		{		
@@ -51,5 +44,4 @@ public class Tile extends GameObject {
 			{return Assets.platform;}				
 		}
 	}
-
 }

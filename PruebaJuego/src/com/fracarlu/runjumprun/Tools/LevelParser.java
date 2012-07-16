@@ -5,7 +5,8 @@ import com.fracarlu.runjumprun.Engine.*;
 import com.fracarlu.runjumprun.Objects.ObstaculoNormal;
 import com.fracarlu.runjumprun.Objects.Tile;
 
-public class LevelParser {
+public class LevelParser 
+{
 	public static final int ST_BEGIN_LEVEL = 0;
 	public static final int ST_END_LEVEL = 1;
 	public static final int ST_IN_LEVEL = 2;
@@ -14,8 +15,7 @@ public class LevelParser {
 	
 	public static ObstaculoNormal[] obstaculos;
 	public static  ArrayList<String> listaniveles;
-	
-	//Constructor privado para que no se pueda usar
+		
 	public  LevelParser(String contenidoFicheroNiveles)
 	{
 		ParseFichero(contenidoFicheroNiveles);
@@ -25,12 +25,10 @@ public class LevelParser {
 	//devuelve un array de strings con los todos los niveles 		
 	private void  ParseFichero(String nivel)
 	{		
-		int len = nivel.length();		
 		char[] canivel = nivel.toCharArray();
 		char[] ca_aux = new char[Mundo.MUNDO_WIDTH];
 		int indexca_aux = 0;
-		int estado = -1;
-		
+		int estado = -1;		
 		
 		listaniveles = new ArrayList<String>();
 		
@@ -70,17 +68,19 @@ public class LevelParser {
 			}					
 		}		
 	}
-	
+	  
+
+
+
 	// <10,1,0; 20,1,0; 30,2,0; 40,1,1>
 	public void ParseLevel (int numnivel)	
 	{
 		String nivel = listaniveles.get(numnivel).toLowerCase().trim();					
-		String[] astrtiles = nivel.split("\\;");
-		int numtiles = astrtiles.length;
+		String[] astrtiles = nivel.split("\\;");		
 		
-		obstaculos = new ObstaculoNormal[numtiles];
+		obstaculos = new ObstaculoNormal[astrtiles.length];
 		
-		for (int i = 0; i < numtiles ; i++)
+		for (int i = 0; i < astrtiles.length ; i++)
 		{			
 			String[] tiledataseparado = new String[3];
 			tiledataseparado = astrtiles[i].split("\\,");		
@@ -89,6 +89,7 @@ public class LevelParser {
 				int x = Integer.parseInt(tiledataseparado[0]);
 				int y = Integer.parseInt(tiledataseparado[1]);
 				int type = Integer.parseInt(tiledataseparado[2]);
+				
 				ObstaculoNormal obstaculo = new ObstaculoNormal(x, y, type);
 				obstaculos[i] = obstaculo;
 				tiledataseparado = null;				
@@ -98,5 +99,16 @@ public class LevelParser {
 				ex.getMessage();				
 			}			
 		}
+	}
+	
+	private void RellenaObjetos(String[] tiledataseparado)
+	{
+		int x = Integer.parseInt(tiledataseparado[0]);
+		int y = Integer.parseInt(tiledataseparado[1]);
+		int type = Integer.parseInt(tiledataseparado[2]);
+		
+		ObstaculoNormal obstaculo = new ObstaculoNormal(x, y, type);
+		obstaculos[i] = obstaculo;
+		tiledataseparado = null;		
 	}
 }

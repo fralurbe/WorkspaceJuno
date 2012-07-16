@@ -51,9 +51,10 @@ public class Assets
 	public static Texture spritesheet_run;
 	public static TextureRegion[] runFrames;
 	public static TextureRegion[] jumpFrames;
+	public static TextureRegion[] hitFrames;
 	public static Animacion corredorCorrer;	
 	public static Animacion corredorSaltar;
-	public static TextureRegion corredorChocar;
+	public static Animacion corredorHit;
 	
 	public static Music music;
 	public static Sound jumpSound;
@@ -116,7 +117,11 @@ public class Assets
         }
         corredorSaltar= new Animacion(0.025f, jumpFrames);
         
-        corredorChocar = new TextureRegion(tmp[0][0]);
+        hitFrames = new TextureRegion[FRAME_COLS];
+        for (int i = 0; i < 3; i++) {
+        	hitFrames [i] = runFrames[i];
+        }
+        corredorHit = new Animacion(0.025f, hitFrames);
         
         fuente = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"), false);
 
@@ -131,7 +136,6 @@ public class Assets
 		levelsfilecontent = LeerFicheroDefinicionNiveles();
 		LevelParser levelparser = new LevelParser(levelsfilecontent);
 		levelparser.ParseLevel(0);
-		
 	}
 
 	public static String LeerFicheroDefinicionNiveles() 
