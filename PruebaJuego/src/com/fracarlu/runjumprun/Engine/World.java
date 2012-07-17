@@ -6,9 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.fracarlu.runjumprun.Objects.*;
 import com.fracarlu.runjumprun.Tools.*;
 
-public class Mundo 
+public class World 
 {	
-	public interface MundoListener 
+	public interface WorldListener 
 	{
 		public void saltar ();
 		public void doblesalto ();
@@ -19,30 +19,30 @@ public class Mundo
 	public static final int TILE_HEIGHT = 1 ;
 	public static final int TILES_PER_SCREEN = 10 ;
 	public static final int SCREENS_PER_LEVEL = 5;
-	public static final int MUNDO_WIDTH = TILES_PER_SCREEN * SCREENS_PER_LEVEL;
-	public static final int MUNDO_HEIGHT = 15;
-	public static final int MUNDO_END = MUNDO_WIDTH - TILES_PER_SCREEN/2;
-	public static final int MUNDO_STATE_RUNNING = 0;
-	public static final int MUNDO_STATE_NEXT_LEVEL = 1;
-	public static final int MUNDO_STATE_GAME_OVER = 2;
+	public static final int WORLD_WIDTH = TILES_PER_SCREEN * SCREENS_PER_LEVEL;
+	public static final int WORLD_HEIGHT = 15;
+	public static final int WORLD_END = WORLD_WIDTH - TILES_PER_SCREEN/2;
+	public static final int WORLD_STATE_RUNNING = 0;
+	public static final int WORLD_STATE_NEXT_LEVEL = 1;
+	public static final int WORLD_STATE_GAME_OVER = 2;
 	
 	public static final Vector2 gravedad = new Vector2(0, -10);	
 	
-	public Corredor corredor;	
+	public Runner corredor;	
 	
-	public final ArrayList<Plataforma> plataformas;
+	public final ArrayList<Platform> plataformas;
 	// public final ArrayList<ObstaculoNormal> obstaculos;
 	public final Random rand;
-	public final MundoListener listener;	
+	public final WorldListener listener;	
 
 	public float distanciaConseguida;
 	public int puntuacion;
 	public int estado;
 	
 	
-	public Mundo (MundoListener listener) {
-		this.corredor = new Corredor(1, 5);
-		this.plataformas = new ArrayList<Plataforma>();
+	public World (WorldListener listener) {
+		this.corredor = new Runner(1, 5);
+		this.plataformas = new ArrayList<Platform>();
 		//this.obstaculos =  new ArrayList<ObstaculoNormal>();
 				
 		this.listener = listener;
@@ -51,7 +51,7 @@ public class Mundo
 
 		this.distanciaConseguida = 0;
 		this.puntuacion = 0;
-		this.estado = MUNDO_STATE_RUNNING;
+		this.estado = WORLD_STATE_RUNNING;
 
 	}	
 	
@@ -62,9 +62,9 @@ public class Mundo
 	
 	private void GenerarPlataformas()
 	{		
-		for (int i = 0; i < MUNDO_WIDTH ; i++)		
+		for (int i = 0; i < WORLD_WIDTH ; i++)		
 		{
-			Plataforma plataforma = new Plataforma(i * TILE_WIDTH, 0, 0);
+			Platform plataforma = new Platform(i * TILE_WIDTH, 0, TileTypes.NORMALOBSTACLE);
 			plataformas.add(plataforma);			
 		}
 	}
@@ -76,9 +76,9 @@ public class Mundo
 	
 	private void updateCorredor (float deltaTime, float accelX, float accelY) 
 	{
-		if (corredor.estado != Corredor.CORREDOR_STATE_UPON_PLATFORM)
+		if (corredor.estado != Runner.CORREDOR_STATE_UPON_PLATFORM)
 		{
-			if (corredor.estado != Corredor.CORREDOR_STATE_HIT)
+			if (corredor.estado != Runner.CORREDOR_STATE_HIT)
 			{
 				int initpostocheck = (int)Math.round(corredor.position.x);
 				if (initpostocheck > 1)
@@ -88,7 +88,7 @@ public class Mundo
 						if (Utils.RectanguloPisandoOtro( corredor.bounds, plataformas.get(i).bounds))
 						{
 							corredor.velocity.y = 0;
-							corredor.estado = Corredor.CORREDOR_STATE_UPON_PLATFORM;
+							corredor.estado = Runner.CORREDOR_STATE_UPON_PLATFORM;
 							break;
 						}			
 					}
@@ -96,23 +96,23 @@ public class Mundo
 			}
 		}
 		
-		if (corredor.estado == Corredor.CORREDOR_STATE_JUMP)
+		if (corredor.estado == Runner.CORREDOR_STATE_JUMP)
 		{
 			corredor.velocity.y = accelY;
-			corredor.estado = Corredor.CORREDOR_STATE_RUN;
+			corredor.estado = Runner.CORREDOR_STATE_RUN;
 		}
 		
 		if (checkHitObstaculo() != -1)
 		{
-			corredor.estado = Corredor.CORREDOR_STATE_HIT;			
+			corredor.estado = Runner.CORREDOR_STATE_HIT;			
 			corredor.velocity.x = -5f;
 			corredor.velocity.y = 5f;			
 		}
 		
 		corredor.update(deltaTime);
-		if (corredor.position.x >= MUNDO_END )
+		if (corredor.position.x >= WORLD_END )
 		{
-			estado = MUNDO_STATE_NEXT_LEVEL;
+			estado = WORLD_STATE_NEXT_LEVEL;
 		}
 		distanciaConseguida = Math.max(corredor.position.x, distanciaConseguida);
 	}
@@ -124,9 +124,9 @@ public class Mundo
 		int initpostocheck = (int)Math.round(corredor.position.x);
 		if (initpostocheck > 1)
 		{
-			for (int i =  initpostocheck - 1 ; i < LevelParser. obstaculos.length; i++ )
+			for (int i =  initpostocheck - 1 ; i < LevelParser.obstacles.length; i++ )
 			{
-				if (corredor.bounds.overlaps(LevelParser. obstaculos[i].bounds))
+				if (corredor.bounds.overlaps(LevelParser.obstacles[i].bounds))
 				{
 					return i;
 				}
@@ -139,7 +139,7 @@ public class Mundo
 	{
 		if (distanciaConseguida - 7.5f > corredor.position.x) 
 		{
-			estado = MUNDO_STATE_GAME_OVER;
+			estado = WORLD_STATE_GAME_OVER;
 		}
 	}
 	

@@ -8,16 +8,16 @@ import com.fracarlu.runjumprun.Asset.*;
 import com.fracarlu.runjumprun.Objects.*;
 import com.fracarlu.runjumprun.Tools.LevelParser;
 
-public class MundoPintador {
+public class WorldRenderer {
 	static final float FRUSTUM_WIDTH = 10;
 	static final float FRUSTUM_HEIGHT = 15;
-	Mundo mundo;
+	World world;
 	OrthographicCamera cam;
 	SpriteBatch batcher;
 	TextureRegion fondo;
 	
-	public MundoPintador (SpriteBatch batch, Mundo mundo) {
-		this.mundo = mundo;
+	public WorldRenderer (SpriteBatch batch, World mundo) {
+		this.world = mundo;
 		this.cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		this.cam.position.set(FRUSTUM_WIDTH / 2, FRUSTUM_HEIGHT / 2, 0);
 		this.batcher = batch;
@@ -27,13 +27,13 @@ public class MundoPintador {
 	public void render () {
 		try
 		{
-			if (mundo.corredor.position.x > cam.position.x) 
+			if (world.corredor.position.x > cam.position.x) 
 			{
-				cam.position.x = mundo.corredor.position.x;				
+				cam.position.x = world.corredor.position.x;				
 			}
 			cam.update();
 			batcher.setProjectionMatrix(cam.combined);
-			renderFondo();
+			renderBackground();
 			renderObjectos();
 		}
 		catch (Exception ex)
@@ -42,7 +42,7 @@ public class MundoPintador {
 		}
 	}
 	
-	public void renderFondo() {
+	public void renderBackground() {
 		try
 		{
 			batcher.disableBlending();
@@ -56,14 +56,14 @@ public class MundoPintador {
 		}
 	}
 	
-	public void renderObjectos() {
+	public void renderObjects() {
 		try
 		{
 			batcher.disableBlending();
 			batcher.begin();
 			renderCorredor();
-			renderPlataformas();
-			renderObstaculos();
+			renderPlatforms();
+			renderObstacles();
 				
 			batcher.end();
 		}
@@ -73,14 +73,14 @@ public class MundoPintador {
 		}
 	}
 	
-	public void renderPlataformas() {
+	public void renderPlatforms() {
 		try
 		{
-			int len = mundo.plataformas.size();
+			int len = world.plataformas.size();
 			for (int i = 0; i < len; i++) 
 			{
 				TextureRegion keyFrame = Assets.platform;
-				Plataforma plataforma = mundo.plataformas.get(i);
+				Platform plataforma = world.plataformas.get(i);
 				
 				batcher.draw(
 						keyFrame,
@@ -96,14 +96,14 @@ public class MundoPintador {
 		}		
 	}
 	
-	public void renderObstaculos()
+	public void renderObstacles()
 	{				
-		for (int i = 0; i < LevelParser.obstaculos.length; i++)
+		for (int i = 0; i < LevelParser.obstacles.length; i++)
 		{
 			batcher.draw(
-					LevelParser.obstaculos[i].getAsset(),
-					LevelParser.obstaculos[i].position.x,
-					LevelParser.obstaculos[i].position.y,
+					LevelParser.obstacles[i].getAsset(),
+					LevelParser.obstacles[i].position.x,
+					LevelParser.obstacles[i].position.y,
 					Tile.TILE_WIDTH,
 					Tile.TILE_HEIGHT);
 		}		
@@ -114,27 +114,27 @@ public class MundoPintador {
 		try
 		{
 			TextureRegion keyFrame;
-			switch (mundo.corredor.estado) {				
-				case Corredor.CORREDOR_STATE_JUMP:
+			switch (world.corredor.estado) {				
+				case Runner.CORREDOR_STATE_JUMP:
 					keyFrame = Assets.corredorSaltar.getKeyFrame(
-							mundo.corredor.estadoTime,
+							world.corredor.estadoTime,
 							Animacion.ANIMACION_NONLOOPING);
 					break;
-				case Corredor.CORREDOR_STATE_HIT:
+				case Runner.CORREDOR_STATE_HIT:
 					keyFrame = Assets.corredorHit.getKeyFrame(
-							mundo.corredor.estadoTime,
+							world.corredor.estadoTime,
 							Animacion.ANIMACION_NONLOOPING);
 					break;				
 				default:
 					keyFrame = Assets.corredorCorrer.getKeyFrame(
-							mundo.corredor.estadoTime, 
+							world.corredor.estadoTime, 
 							Animacion.ANIMACION_LOOPING);
 			}			
 			
 			batcher.draw(
 					keyFrame, 
-					mundo.corredor.position.x , 
-					mundo.corredor.position.y , 1, 1);			
+					world.corredor.position.x , 
+					world.corredor.position.y , 1, 1);			
 		}
 		catch (Exception ex)
 		{

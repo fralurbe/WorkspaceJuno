@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.fracarlu.runjumprun.Asset.Assets;
 import com.fracarlu.runjumprun.Engine.Config;
 import com.fracarlu.runjumprun.Engine.Juego;
-import com.fracarlu.runjumprun.Engine.Mundo;
-import com.fracarlu.runjumprun.Engine.Mundo.MundoListener;
-import com.fracarlu.runjumprun.Engine.MundoPintador;
+import com.fracarlu.runjumprun.Engine.World;
+import com.fracarlu.runjumprun.Engine.World.WorldListener;
+import com.fracarlu.runjumprun.Engine.WorldRenderer;
 import com.fracarlu.runjumprun.Tools.*;
 
 public class JuegoPantalla extends Pantalla
@@ -29,14 +29,14 @@ public class JuegoPantalla extends Pantalla
 	private int lastScore;
 	private String scoreString;
 
-	Mundo mundo;
-	MundoListener mundoListener;
-	MundoPintador pintador;
+	World mundo;
+	WorldListener mundoListener;
+	WorldRenderer pintador;
 
 	public JuegoPantalla(Juego juego)
 	{
 		super(juego);
-		mundoListener = new MundoListener()
+		mundoListener = new WorldListener()
 		{
 			@Override
 			public void saltar()
@@ -56,8 +56,8 @@ public class JuegoPantalla extends Pantalla
 				Assets.playSound(Assets.hitSound);
 			}
 		};
-		mundo = new Mundo(mundoListener);
-		pintador = new MundoPintador(batcher, mundo);
+		mundo = new World(mundoListener);
+		pintador = new WorldRenderer(batcher, mundo);
 
 		pauseBounds = new Rectangle(Config.anchoTotal - Config.anchoBoton, 0,
 				Config.anchoBoton, Config.altoBoton);
@@ -138,8 +138,8 @@ public class JuegoPantalla extends Pantalla
 	{
 		if (Gdx.input.justTouched())
 		{
-			mundo = new Mundo(mundoListener);
-			pintador = new MundoPintador(batcher, mundo);
+			mundo = new World(mundoListener);
+			pintador = new WorldRenderer(batcher, mundo);
 			mundo.puntuacion = lastScore;
 			estado = GAME_READY;
 		}
@@ -193,11 +193,11 @@ public class JuegoPantalla extends Pantalla
 			lastScore = mundo.puntuacion;
 			scoreString = "SCORE: " + lastScore;
 		}
-		if (mundo.estado == Mundo.MUNDO_STATE_NEXT_LEVEL)
+		if (mundo.estado == World.WORLD_STATE_NEXT_LEVEL)
 		{
 			estado = GAME_LEVEL_END;
 		}
-		if (mundo.estado == Mundo.MUNDO_STATE_GAME_OVER)
+		if (mundo.estado == World.WORLD_STATE_GAME_OVER)
 		{
 			estado = GAME_OVER;
 			/*

@@ -2,7 +2,9 @@ package com.fracarlu.runjumprun.Tools;
 
 import java.util.ArrayList;
 import com.fracarlu.runjumprun.Engine.*;
-import com.fracarlu.runjumprun.Objects.ObstaculoNormal;
+import com.fracarlu.runjumprun.Objects.Obstacle;
+import com.fracarlu.runjumprun.Objects.Obstacle;
+import com.fracarlu.runjumprun.Objects.Platform;
 import com.fracarlu.runjumprun.Objects.Tile;
 
 public class LevelParser 
@@ -13,8 +15,11 @@ public class LevelParser
 	public static final int ST_BEGIN_TILE  = 3;
 	public static final int ST_END_TILE  = 4;	
 	
-	public static ObstaculoNormal[] obstaculos;
-	public static  ArrayList<String> listaniveles;
+	public static Obstacle[] obstacles;
+	public static Platform[] platforms;
+	public static Tile[] tiles;
+	
+	public static  ArrayList<String> levelsalist;
 		
 	public  LevelParser(String contenidoFicheroNiveles)
 	{
@@ -22,17 +27,17 @@ public class LevelParser
 	}
 	
 		
-	//devuelve un array de strings con los todos los niveles 		
+	// Devuelve un array de strings con los todos los niveles 		
 	private void  ParseFichero(String nivel)
 	{		
 		char[] canivel = nivel.toCharArray();
-		char[] ca_aux = new char[Mundo.MUNDO_WIDTH];
+		char[] ca_aux = new char[World.WORLD_WIDTH];
 		int indexca_aux = 0;
 		int estado = -1;		
 		
-		listaniveles = new ArrayList<String>();
+		levelsalist = new ArrayList<String>();
 		
-		for (int i = 0; i < Mundo.MUNDO_WIDTH; i++)
+		for (int i = 0; i < World.WORLD_WIDTH; i++)
 		{		
 			char c = canivel[i];
 			if (c == '<')
@@ -48,14 +53,14 @@ public class LevelParser
 				case ST_BEGIN_LEVEL:
 				{									
 					estado = ST_IN_LEVEL;
-					ca_aux = new char[Mundo.MUNDO_WIDTH];
+					ca_aux = new char[World.WORLD_WIDTH];
 					indexca_aux = 0;
 				}
 				break;
 				case ST_END_LEVEL:
 				{
 					ca_aux[indexca_aux] = '\0';
-					listaniveles.add(new String(ca_aux));					
+					levelsalist.add(new String(ca_aux));					
 				}
 				break;
 				case ST_IN_LEVEL:
@@ -67,18 +72,15 @@ public class LevelParser
 				break;
 			}					
 		}		
-	}
-	  
-
-
+	}	  
 
 	// <10,1,0; 20,1,0; 30,2,0; 40,1,1>
 	public void ParseLevel (int numnivel)	
 	{
-		String nivel = listaniveles.get(numnivel).toLowerCase().trim();					
+		String nivel = levelsalist.get(numnivel).toLowerCase().trim();					
 		String[] astrtiles = nivel.split("\\;");		
 		
-		obstaculos = new ObstaculoNormal[astrtiles.length];
+		obstacles = new Obstacle[astrtiles.length];
 		
 		for (int i = 0; i < astrtiles.length ; i++)
 		{			
@@ -90,8 +92,8 @@ public class LevelParser
 				int y = Integer.parseInt(tiledataseparado[1]);
 				int type = Integer.parseInt(tiledataseparado[2]);
 				
-				ObstaculoNormal obstaculo = new ObstaculoNormal(x, y, type);
-				obstaculos[i] = obstaculo;
+				Obstacle obstaculo = new Obstacle(x, y, type);
+				obstacles[i] = obstaculo;
 				tiledataseparado = null;				
 			}
 			catch (Exception ex)
@@ -107,8 +109,8 @@ public class LevelParser
 		int y = Integer.parseInt(tiledataseparado[1]);
 		int type = Integer.parseInt(tiledataseparado[2]);
 		
-		ObstaculoNormal obstaculo = new ObstaculoNormal(x, y, type);
-		obstaculos[i] = obstaculo;
+		Obstacle obstaculo = new Obstacle(x, y, type);
+		obstacles[i] = obstaculo;
 		tiledataseparado = null;		
 	}
 }

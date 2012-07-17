@@ -7,11 +7,12 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.fracarlu.runjumprun.Objects.Obstacle;
 import com.fracarlu.runjumprun.Tools.LevelParser;
 
 // *@Clase para cargar los assets
 public class Assets 
-{   
+{   	
 	private static final int FRAME_COLS = 6;         
     private static final int FRAME_ROWS = 5;         
 
@@ -135,7 +136,7 @@ public class Assets
 		clickSound = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
 		levelsfilecontent = LeerFicheroDefinicionNiveles();
 		LevelParser levelparser = new LevelParser(levelsfilecontent);
-		levelparser.ParseLevel(0);
+		levelparser.ParseLevel(0);		
 	}
 
 	public static String LeerFicheroDefinicionNiveles() 

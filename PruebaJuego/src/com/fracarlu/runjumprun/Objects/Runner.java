@@ -1,8 +1,8 @@
 package com.fracarlu.runjumprun.Objects;
 
-import com.fracarlu.runjumprun.Engine.Mundo;
+import com.fracarlu.runjumprun.Engine.World;
 
-public class Corredor extends DynamicGameObject
+public class Runner extends DynamicGameObject
 {
 	public static final int CORREDOR_STATE_JUMP = 0;
 	public static final int CORREDOR_STATE_RUN = 1;
@@ -20,7 +20,7 @@ public class Corredor extends DynamicGameObject
 	public int estado;
 	public float estadoTime;
 
-	public Corredor(float x, float y) 
+	public Runner(float x, float y) 
 	{
 		super(x, y, CORREDOR_WIDTH , CORREDOR_HEIGHT);
 		estado = CORREDOR_STATE_RUN;
@@ -30,7 +30,7 @@ public class Corredor extends DynamicGameObject
 	
 	public void update (float deltaTime) 
 	{
-		velocity.add(Mundo.gravedad.x * deltaTime, Mundo.gravedad.y * deltaTime);
+		velocity.add(World.gravedad.x * deltaTime, World.gravedad.y * deltaTime);
         position.add(velocity.x * deltaTime, velocity.y * deltaTime);
                 
 		if (!CheckEndOfTheWorld())
@@ -45,7 +45,7 @@ public class Corredor extends DynamicGameObject
 		else
 		{
 			velocity.x = 0;
-			position.x = Mundo.MUNDO_WIDTH;
+			position.x = World.WORLD_WIDTH;
 		}	
 	}
 	
@@ -53,7 +53,7 @@ public class Corredor extends DynamicGameObject
 	{
 		if(position.y > 1f)
 		{
-			velocity.y += Mundo.gravedad.y * deltaTime;			
+			velocity.y += World.gravedad.y * deltaTime;			
 		}
 		else
 		{			
@@ -65,7 +65,7 @@ public class Corredor extends DynamicGameObject
 	
 	private Boolean CheckEndOfTheWorld()
 	{
-		if (position.x >= Mundo.MUNDO_WIDTH-Mundo.TILES_PER_SCREEN / 2)
+		if (position.x >= World.WORLD_WIDTH-World.TILES_PER_SCREEN / 2)
 		{			
 			return true;
 		}
