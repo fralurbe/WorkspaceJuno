@@ -18,12 +18,14 @@ public class LevelParser
 	public static Obstacle[] obstacles;
 	public static Platform[] platforms;
 	public static Tile[] tiles;
+	private TileFactory tf;
 	
 	public static  ArrayList<String> levelsalist;
 		
 	public  LevelParser(String contenidoFicheroNiveles)
 	{
 		ParseFichero(contenidoFicheroNiveles);
+		tf = new TileFactory();
 	}
 	
 		

@@ -18,6 +18,6 @@ public class Platform extends Tile
 	
 	public TextureRegion getAsset()
 	{				
-		return Assets.platform;}
+		return Assets.platform;
 	}	
 }

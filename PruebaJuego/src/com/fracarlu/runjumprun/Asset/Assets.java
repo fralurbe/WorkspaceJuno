@@ -72,7 +72,7 @@ public class Assets
 	
 	public static void load () 
 	{		
-		spritesheet = loadTexture("spritesheet512x512.png");
+		spritesheet = loadTexture("spritesheet512x512.png");		
 		fondogeneral = new TextureRegion(spritesheet, 0, 64, 320, 480);
 		play = new TextureRegion(spritesheet, 0, 0, 128, 64 );
 		sound = new TextureRegion(spritesheet, 128, 0, 128, 64 );
@@ -135,6 +135,8 @@ public class Assets
 		hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.ogg"));		
 		clickSound = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
 		levelsfilecontent = LeerFicheroDefinicionNiveles();
+		ImageLevelParser ilp = new ImageLevelParser();
+		ilp.loadTexture("level_1.png");
 		LevelParser levelparser = new LevelParser(levelsfilecontent);
 		levelparser.ParseLevel(0);		
 	}
