@@ -10,20 +10,20 @@ import com.badlogic.gdx.math.Vector2;
  *Plataforma que tiene una fuerza hacia arriba
  */
 
-public class PlatformSpring extends Platform {		
+public class SpringPlatform extends Platform {		
 	public static final Vector2 force = new Vector2(0, 5f);
 
-	public PlatformSpring(float x, float y, float width, float height) {
+	public SpringPlatform(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		// TODO Auto-generated constructor stub
 	}
 
-	public PlatformSpring(float x, float y, TileTypes tiletype) {
-		super(x, y, TileTypes.SPRINGPLATFORM);
+	public SpringPlatform(float x, float y, TileType tiletype) {
+		super(x, y, TileType.SPRINGPLATFORM);
 		// TODO Auto-generated constructor stub
 	}
 
-	public PlatformSpring(float x, float y) {
+	public SpringPlatform(float x, float y) {
 		super(x, y);
 		// TODO Auto-generated constructor stub
 	}	

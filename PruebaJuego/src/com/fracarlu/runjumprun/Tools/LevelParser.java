@@ -80,7 +80,7 @@ public class LevelParser
 		String nivel = levelsalist.get(numnivel).toLowerCase().trim();					
 		String[] astrtiles = nivel.split("\\;");		
 		
-		obstacles = new Obstacle[astrtiles.length];
+		tiles = new Tile[astrtiles.length];
 		
 		for (int i = 0; i < astrtiles.length ; i++)
 		{			
@@ -109,7 +109,7 @@ public class LevelParser
 		int y = Integer.parseInt(tiledataseparado[1]);
 		int type = Integer.parseInt(tiledataseparado[2]);
 		
-		Obstacle obstaculo = new Obstacle(x, y, type);
+		Obstacle obstaculo = new Obstacle(x, y, TileTypes.);
 		obstacles[i] = obstaculo;
 		tiledataseparado = null;		
 	}

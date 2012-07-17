@@ -16,8 +16,8 @@ public class Platform extends Tile
 		// TODO Auto-generated constructor stub
 	}
 
-	public Platform(float x, float y, TileTypes tiletype) {
-		super(x, y, TileTypes.NORMALPLATFORM);
+	public Platform(float x, float y, TileType tiletype) {
+		super(x, y, TileType.NORMALPLATFORM);
 		// TODO Auto-generated constructor stub
 	}	
 }

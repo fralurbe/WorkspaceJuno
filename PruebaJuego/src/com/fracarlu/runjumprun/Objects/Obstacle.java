@@ -9,8 +9,8 @@ public class Obstacle 	extends Tile {
 	}
 
 
-	public Obstacle(float x, float y, TileTypes tiletype) {
-		super(x, y, TileTypes.NORMALOBSTACLE);
+	public Obstacle(float x, float y, TileType tiletype) {
+		super(x, y, TileType.NORMALOBSTACLE);
 		// TODO Auto-generated constructor stub
 	}
 

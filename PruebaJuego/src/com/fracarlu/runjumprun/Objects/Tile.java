@@ -3,18 +3,18 @@ package com.fracarlu.runjumprun.Objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fracarlu.runjumprun.Asset.Assets;
 
-public class Tile extends GameObject 
+public abstract  class Tile extends GameObject 
 {
 	public static final float TILE_WIDTH = 1f;
 	public static final float TILE_HEIGHT = 1f;	
 			
-	protected TileTypes tiletype = TileTypes.NORMALPLATFORM;
+	protected TileType tiletype = TileType.NORMALPLATFORM;
 	
 	public Tile(float x, float y) {
 		super(x, y, TILE_WIDTH, TILE_HEIGHT);		
 	}
 	
-	public Tile(float x, float y, TileTypes tiletype) {
+	public Tile(float x, float y, TileType tiletype) {
 		super(x, y, TILE_WIDTH, TILE_HEIGHT);
 		this.tiletype  = tiletype ;		
 	}
