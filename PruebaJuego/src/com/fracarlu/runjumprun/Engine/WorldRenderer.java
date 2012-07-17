@@ -34,7 +34,7 @@ public class WorldRenderer {
 			cam.update();
 			batcher.setProjectionMatrix(cam.combined);
 			renderBackground();
-			renderObjectos();
+			renderObjects();
 		}
 		catch (Exception ex)
 		{
@@ -86,8 +86,8 @@ public class WorldRenderer {
 						keyFrame,
 						plataforma.position.x,
 						plataforma.position.y,
-						plataforma.TILE_WIDTH,
-						plataforma.TILE_HEIGHT);				
+						Tile.TILE_WIDTH,
+						Tile.TILE_HEIGHT);				
 			}
 		}
 		catch (Exception ex)

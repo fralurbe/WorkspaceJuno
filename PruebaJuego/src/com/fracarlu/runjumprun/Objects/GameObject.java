@@ -19,7 +19,7 @@ package com.fracarlu.runjumprun.Objects;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class GameObject {
+public abstract class GameObject {
 	public final Vector2 position;
 	public final Rectangle bounds;	
 

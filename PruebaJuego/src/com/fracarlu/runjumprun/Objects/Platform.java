@@ -7,17 +7,17 @@ public class Platform extends Tile
 {
 
 	public Platform(float x, float y) {
-		super(x, y);
-		// TODO Auto-generated constructor stub
+		super(x, y);		
+		tiletype = TileType.NORMALPLATFORM;
 	}
 
 	public Platform(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		// TODO Auto-generated constructor stub
+		tiletype = TileType.NORMALPLATFORM;
 	}
-
-	public Platform(float x, float y, TileType tiletype) {
-		super(x, y, TileType.NORMALPLATFORM);
-		// TODO Auto-generated constructor stub
+	
+	public TextureRegion getAsset()
+	{				
+		return Assets.platform;}
 	}	
 }
