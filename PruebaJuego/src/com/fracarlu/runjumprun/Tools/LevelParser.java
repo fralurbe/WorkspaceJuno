@@ -94,7 +94,7 @@ public class LevelParser
 				int y = Integer.parseInt(tiledataseparado[1]);
 				int type = Integer.parseInt(tiledataseparado[2]);
 				
-				Obstacle obstaculo = new Obstacle(x, y, type);
+				Obstacle obstaculo = new Obstacle(x, y);
 				obstacles[i] = obstaculo;
 				tiledataseparado = null;				
 			}
@@ -104,15 +104,5 @@ public class LevelParser
 			}			
 		}
 	}
-	
-	private void RellenaObjetos(String[] tiledataseparado)
-	{
-		int x = Integer.parseInt(tiledataseparado[0]);
-		int y = Integer.parseInt(tiledataseparado[1]);
-		int type = Integer.parseInt(tiledataseparado[2]);
 		
-		Obstacle obstaculo = new Obstacle(x, y, TileTypes.);
-		obstacles[i] = obstaculo;
-		tiledataseparado = null;		
-	}
 }
