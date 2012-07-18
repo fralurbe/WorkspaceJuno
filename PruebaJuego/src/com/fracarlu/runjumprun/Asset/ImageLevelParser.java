@@ -28,19 +28,22 @@ public static TileFactory tilefactory;
 			
 			int altura = pixmap.getHeight();
 			int anchura = pixmap.getWidth();
-			Pixmap.Format format = pixmap.getFormat();
+			
 			
 			tiles = new Tile[altura][anchura];
 			
+
 			
-			java.nio.ByteBuffer bb =  ByteBuffer.allocateDirect(altura*anchura*3);
+			java.nio.ByteBuffer bb =  ByteBuffer.allocateDirect(altura*anchura*4);
+			Pixmap.Format format = pixmap.getFormat();
  			bb = pixmap.getPixels();
 			
-			for (int i = 0; i < altura * anchura; i = i+3)
+			for (int i = 0; i < altura * anchura; i = i+4)
 			{
 				byte r = bb.get(i);
 				byte g = bb.get(i + 1);
 				byte b = bb.get(i + 2);
+				byte a = bb.get(i + 3);
 				procesaSegunColor(r,  g,  b,i,anchura,altura);
 			}
 			
@@ -62,7 +65,7 @@ public static TileFactory tilefactory;
 			x = index % anchura;
 			y = index / altura;
 
-			if (r == 1 && g == 1 && b == 1)//es blanco puro
+			if (r > 0 || g > 0 || b > 0)//es blanco puro
 			{
 				tiles[x][y] = tilefactory.createTile(x, y, TileType.NORMALPLATFORM);
 			}		
@@ -82,11 +85,13 @@ public static TileFactory tilefactory;
 						if (b == 1)//es azul
 						{		
 							String traza = "azul";
+							traza += "azul";
 						}
 						else
 							if (r == 0 && g == 0 && b == 0)//es negro puro
 							{
 								String traza = "negro";
+								traza += "negro";
 							}
 			}
 			
