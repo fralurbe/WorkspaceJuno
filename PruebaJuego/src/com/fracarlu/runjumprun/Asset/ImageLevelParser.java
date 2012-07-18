@@ -16,39 +16,36 @@ import com.fracarlu.runjumprun.Objects.TileType;
 
 public class ImageLevelParser {
 
-public static Tile tiles[][];
-public static TileFactory tilefactory;
-
+	public static Tile tiles[][];
+	public static TileFactory tilefactory;
+	
 	
 	public static void loadTexture (String levelfile) 
 	{
+		
 		try
 		{
 			Pixmap pixmap = new Pixmap(Gdx.files.internal(levelfile));
 			
 			int altura = pixmap.getHeight();
-			int anchura = pixmap.getWidth();
-			
-			
+			int anchura = pixmap.getWidth();			
+			tilefactory = new TileFactory(); 
 			tiles = new Tile[altura][anchura];
 			
-
-			
-			java.nio.ByteBuffer bb =  ByteBuffer.allocateDirect(altura*anchura*4);
+			java.nio.ByteBuffer bb =  ByteBuffer.allocateDirect(altura * anchura * 4);
 			Pixmap.Format format = pixmap.getFormat();
  			bb = pixmap.getPixels();
 			
-			for (int i = 0; i < altura * anchura; i = i+4)
+			for (int i = 0; i < altura * anchura; i++)
 			{
-				byte r = bb.get(i);
-				byte g = bb.get(i + 1);
-				byte b = bb.get(i + 2);
-				byte a = bb.get(i + 3);
-				procesaSegunColor(r,  g,  b,i,anchura,altura);
+				int  r = bb.get() & 0xff;;
+				int  g = bb.get()& 0xff;
+				int  b = bb.get()& 0xff;
+				int  a = bb.get()& 0xff;
+				procesaSegunColor(r,  g,  b, i, anchura, altura);
 			}
 			
-			pixmap.dispose();
-			
+			pixmap.dispose();			
 		}
 		catch(Exception ex)
 		{
@@ -57,19 +54,21 @@ public static TileFactory tilefactory;
 	}
 
 
-	private static void procesaSegunColor(byte r, byte g, byte b,int index,int anchura, int altura)
+	private static void procesaSegunColor(int r, int g, int b,int index,int anchura, int altura)
 	{
 		try
 		{		
 			int x, y;
-			x = index % anchura;
-			y = index / altura;
+			x = index % altura;
+			y = index / anchura;
+			
+			
 
 			if (r > 0 || g > 0 || b > 0)//es blanco puro
 			{
 				tiles[x][y] = tilefactory.createTile(x, y, TileType.NORMALPLATFORM);
 			}		
-			else
+			
 			{
 				if (r == 1)//es rojo
 				{
