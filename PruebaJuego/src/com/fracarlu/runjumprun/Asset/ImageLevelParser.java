@@ -29,19 +29,23 @@ public static TileFactory tilefactory;
 			int altura = pixmap.getHeight();
 			int anchura = pixmap.getWidth();
 			Pixmap.Format format = pixmap.getFormat();
-			if (format == Pixmap.Format.RGBA8888)
+			
+			tiles = new Tile[altura][anchura];
+			
+			
+			java.nio.ByteBuffer bb =  ByteBuffer.allocateDirect(altura*anchura*3);
+ 			bb = pixmap.getPixels();
+			
+			for (int i = 0; i < altura * anchura; i = i+3)
 			{
-				tiles = new Tile[altura][anchura];
-						
-				for (int x = 0; x < anchura; x++)
-				{
-					for (int y = 0; y < altura ; y++) 				             
-		            {	            	
-		            	procesaSegunColor(pixmap.getPixel(x, y),x,y); 
-		            }
-				}
-				pixmap.dispose();
+				byte r = bb.get(i);
+				byte g = bb.get(i + 1);
+				byte b = bb.get(i + 2);
+				procesaSegunColor(r,  g,  b,i,anchura,altura);
 			}
+			
+			pixmap.dispose();
+			
 		}
 		catch(Exception ex)
 		{
@@ -49,37 +53,43 @@ public static TileFactory tilefactory;
 		}
 	}
 
-	private static void procesaSegunColor(int pixel,int x, int y)
+
+	private static void procesaSegunColor(byte r, byte g, byte b,int index,int anchura, int altura)
 	{
 		try
-		{
-			long mask1 = (long) pixel & 0xFFFFFFFFL;
-			float r = (mask1 & 0xFF000000) / 255.0f;
-			float g = (mask1 & 0x00FF0000) / 255.0f;
-			float b = (mask1 & 0x0000FF00) / 255.0f;
-			float a = (mask1 & 0x000000FF) / 255.0f;
-			if (a == 1.0)//no es transparente
+		{		
+			int x, y;
+			x = index % anchura;
+			y = index / altura;
+
+			if (r == 1 && g == 1 && b == 1)//es blanco puro
 			{
-				if (r != 0f && g != 0f && b != 0f)//no es negro
+				tiles[x][y] = tilefactory.createTile(x, y, TileType.NORMALPLATFORM);
+			}		
+			else
+			{
+				if (r == 1)//es rojo
 				{
-					if (r == 1.0f && g == 1.0f && b == 1.0f)//es blanco puro
-					{
-						tiles[x][y] = tilefactory.createTile(x, y, TileType.NORMALPLATFORM);
-					}		
-					else
-					{
-						if (r == 1.0f)//es rojo
-						{
-							tiles[x][y] = tilefactory.createTile(x, y, TileType.NORMALOBSTACLE);
-						}
-						
-						if (g == 1.0f)//es verde
-						{
-							tiles[x][y] = tilefactory.createTile(x, y, TileType.SPRINGPLATFORM);
-						}
-					}
+					tiles[x][y] = tilefactory.createTile(x, y, TileType.NORMALOBSTACLE);
 				}
+				
+				else 
+					if (g == 1)//es verde
+					{
+						tiles[x][y] = tilefactory.createTile(x, y, TileType.SPRINGPLATFORM);
+					}
+					else 
+						if (b == 1)//es azul
+						{		
+							String traza = "azul";
+						}
+						else
+							if (r == 0 && g == 0 && b == 0)//es negro puro
+							{
+								String traza = "negro";
+							}
 			}
+			
 		}
 		catch (Exception ex)
 		{
