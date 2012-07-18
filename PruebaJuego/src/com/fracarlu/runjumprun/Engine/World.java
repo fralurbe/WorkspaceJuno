@@ -64,7 +64,7 @@ public class World
 	{		
 		for (int i = 0; i < WORLD_WIDTH ; i++)		
 		{
-			Platform plataforma = new Platform(i * TILE_WIDTH, 0, TileType.NORMALOBSTACLE);
+			Platform plataforma = new Platform(i * TILE_WIDTH, 0);
 			plataformas.add(plataforma);			
 		}
 	}
@@ -141,6 +141,5 @@ public class World
 		{
 			estado = WORLD_STATE_GAME_OVER;
 		}
-	}
-	
+	}	
 }

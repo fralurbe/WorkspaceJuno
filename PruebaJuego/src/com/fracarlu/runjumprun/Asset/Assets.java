@@ -136,7 +136,8 @@ public class Assets
 		clickSound = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
 		levelsfilecontent = LeerFicheroDefinicionNiveles();
 		ImageLevelParser ilp = new ImageLevelParser();
-		ilp.loadTexture("level_1.png");
+		ImageLevelParser.loadTexture("level_1.png");
+		
 		LevelParser levelparser = new LevelParser(levelsfilecontent);
 		levelparser.ParseLevel(0);		
 	}
